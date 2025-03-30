@@ -10,16 +10,16 @@ UINT CbvIdx;
 struct CONST_BUF0 
 {
 	float time;
-    float width;
-	float height;
+    float resolution_x;
+	float resolution_y;
 };
 struct CONST_BUF0* CB0;
 
 //Entry point
 INT WINAPI wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ INT)
 {
-	window(L"RayMarching", 1920, 1080, NO_WINDOW);
-	createPipeline("PixelShader2");
+	window(L"Signed Distance Field", 1920, 1080, NO_WINDOW);
+	createPipeline("PixelShader");
 
 	//リソース初期化
 	{
@@ -28,10 +28,10 @@ INT WINAPI wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ INT)
 			//texcoordは、xを-aspect~aspect,　yを1~-1とする
 			float vertices[] = {
 				//position            texcoord
-				-1.0f,  1.0f,  0.0f,  0,		height(), //左上
-				-1.0f, -1.0f,  0.0f,  0,		0, //左下
-				 1.0f,  1.0f,  0.0f,  width(),  height(), //右上
-				 1.0f, -1.0f,  0.0f,  width(),  0, //右下
+				-1.0f,  1.0f,  0.0f,  0,		height(),	//左上
+				-1.0f, -1.0f,  0.0f,  0,		0,			//左下
+				 1.0f,  1.0f,  0.0f,  width(),  height(),	//右上
+				 1.0f, -1.0f,  0.0f,  width(),  0,			//右下
 			};
 			unsigned numVertexElements = 5;
 			//データサイズを求めておく
@@ -54,8 +54,8 @@ INT WINAPI wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ INT)
 			createDescriptorHeap(1);
 			//ビューをつくってインデックスをもらっておく
 			CbvIdx = createConstantBufferView(ConstBuffer0);
-            CB0->width = width();
-            CB0->height = height();
+            CB0->resolution_x = width();
+            CB0->resolution_y = height();
 		}
 	}
 
